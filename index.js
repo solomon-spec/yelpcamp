@@ -31,7 +31,7 @@ app.get('/campgrounds', async function (req, res) {
 })
 
 // show one campground
-app.get('/campgrounds/show/:id', async function (req, res) {
+app.get('/campgrounds/:id/show', async function (req, res) {
     const {id} = req.params;
     const campground = await campGround.findById(id);
     console.log(campground);
@@ -52,7 +52,28 @@ app.post('/campgrounds/new', async function (req, res) {
     res.redirect('/campgrounds');
 })
 
+// delete campground
+app.delete('/campgrounds/:id/', async function (req, res) {
+    const {id} = req.params;
+    await campGround.findByIdAndDelete(id);
+    res.redirect('/campgrounds');
+})
 
+// edit campground
+app.get('/campgrounds/edit/:id', async function (req, res) {
+    const {id} = req.params;
+    const campground = await campGround.findById(id);
+    res.render('editcamp', {campground});
+})
+
+app.put('/campgrounds/:id/', async function (req, res) {
+    const {id} = req.params;
+    curCourse = await campGround.findById(id);
+    curCourse.title = req.body.title;
+    curCourse.location = req.body.location;
+    await curCourse.save();
+    res.redirect('/campgrounds');
+});
 
 app.listen(3000, function () {
     console.log('listening on port 3000!');
