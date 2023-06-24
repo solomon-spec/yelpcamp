@@ -19,8 +19,12 @@ async function createSeed() {
         let campName = `${descriptors[i]} ${places[j]}`
         let k = Math.floor(Math.random()*cities.length)
         let nplace = `${cities[k].city} ${cities[k].state}`
-        newCamp = new CampGround({title:campName, location:nplace})
+        let price = Math.floor(Math.random()*1000) + 1
+        let image = 'http://source.unsplash.com/collection/484351'
+        let discription = 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Eum at laboriosam, veniam reprehenderit quidem excepturi reiciendis impedit ducimus quibusdam suscipit voluptatibus porro vel tempore iusto ipsa. Nulla voluptates voluptatem tempora.'
+        newCamp = new CampGround({title:campName, location:nplace, price,image,discription})
         newCamp.save()
     }
+    return true
 }
-createSeed().then(() => mongoose.connection.close() )
+createSeed()

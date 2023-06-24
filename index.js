@@ -22,13 +22,13 @@ app.use(methodOverride('_method'));
 app.engine('ejs', ejsMate);
 
 app.get('/', function (req, res) {
-    res.render('home');
+    res.render('pages/home');
 });
 
 // show all campgrounds
 app.get('/campgrounds', async function (req, res) {
     const campgrounds = await campGround.find({});
-    res.render('campgrounds', {campgrounds});
+    res.render('pages/campgrounds', {campgrounds});
 })
 
 // show one campground
@@ -36,7 +36,7 @@ app.get('/campgrounds/:id/show', async function (req, res) {
     const {id} = req.params;
     const campground = await campGround.findById(id);
     console.log(campground);
-    res.render('showcamp', {campground});
+    res.render('pages/showcamp', {campground});
 });
 
 
@@ -44,7 +44,7 @@ app.get('/campgrounds/:id/show', async function (req, res) {
 // new campgrounds
 
 app.get('/campgrounds/new', function (req, res) {
-    res.render('newcamp');
+    res.render('pages/newcamp');
 })
 app.post('/campgrounds/new', async function (req, res) {
 
@@ -64,7 +64,7 @@ app.delete('/campgrounds/:id/', async function (req, res) {
 app.get('/campgrounds/edit/:id', async function (req, res) {
     const {id} = req.params;
     const campground = await campGround.findById(id);
-    res.render('editcamp', {campground});
+    res.render('pages/editcamp', {campground});
 })
 
 app.put('/campgrounds/:id/', async function (req, res) {

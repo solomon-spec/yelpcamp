@@ -4,8 +4,9 @@ const model = mogoose.model;
 
 const campGroundSchema = new Schema({
     title: String,
-    price: String,
-    description: String,
+    price: Number,
+    image:String,
+    discription: String,
     location: String
 });
 
