@@ -1,11 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><% campground.title %></title>
-</head>
-<body>
+<% layout('./boilerplate/main') %>
     <h1>camp</h1>
     <h1><%= campground.title %></h1>
     <p><%= campground.location %></p>
@@ -16,5 +9,5 @@
     <form method="get" action="/campgrounds/edit/<%=campground._id%>">
         <button>Edit</button>
     </form>
-</body>
-</html>
+    <a href="/campgrounds">back to background</a>
+   
