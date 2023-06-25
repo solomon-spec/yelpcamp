@@ -1,16 +1,18 @@
 <% layout('./layouts/boilerplate') %>
-    <h1>camp</h1>
-    <h1><%= campground.title %></h1>
-    <img style="width:100%;"src="<%= campground.image %>" alt="">
-    <p><%= campground.location %></p>
-    <p><%= campground.discription %></p>
-    <p><%= campground.price%></p>
-    <form method="post" action="/campgrounds/<%=campground._id%>?_method=delete">
-        <button>delete</button>
-    </form>
-    <form method="get" action="/campgrounds/edit/<%=campground._id%>">
-        <button>Edit</button>
-    </form>
-    <a href="/campgrounds">back to background</a>
-    
+    <div class="card col-6 offset-3 mb-5">
+        <img style="width:100%;"src="<%= campground.image %>" alt="">
+        <div class="card-body">
+          <h1 class="card-title"><%= campground.title %></h1>
+          <p class="card-text"><%= campground.discription %></p>
+        </div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item"><span class="fw-bold">Price: </span>$<%= campground.price%></li>
+          <li class="list-group-item"><span class="fw-bold">Location: </span><%= campground.location%></li>
+        </ul>
+        <div class="card-body">
+          <a href="/campgrounds/edit/<%=campground._id%>" class="card-link btn btn-success">Edit</a>
+          <a href="/campgrounds/<%=campground._id%>?_method=delete" class="card-link btn btn-danger">Delete</a>
+          <a class="btn btn-primary" href="/campgrounds">back to background</a>
+        </div>
+      </div>
    

@@ -1,8 +1,20 @@
 <% layout('./layouts/boilerplate') %>
-    <form method="post"action="/campgrounds/<%= campground._id %>?_method=put">
-        <label for="title">title</label>
-        <input type="text" name="title" id="title" value="<%= campground.title%>">
-        <label for="location">location</label>
-        <input type="text" name="location" id="location" value="<%= campground.location %>">
-        <button>Submit</button>
-    </form>
+<div class="row">
+    <div class="col-6 offset-3">
+        <h1 class="text-center">Edit Campground</h1>
+        <form method="post"action="/campgrounds/<%= campground._id %>?_method=put">
+            <label class="form-label" for="title">Title</label>
+            <input class="form-control mb-3" type="text" name="title" id="title" value="<%= campground.title %>">
+            <label class="form-label" for="location">Location</label>
+            <input class="form-control mb-3" type="text" name="location" id="location" value="<%= campground.location %>">
+            <label class="form-label" for="img-url">Image Url</label>
+            <input class="form-control mb-3" type="text" name="imgurl" id="imgurl" value="<%= campground.image %>">
+            <label class="form-label" for="price">Campground price</label>
+            <input class="form-control mb-3" type="text" id="price" name="price" value="<%= campground.price %>">
+            <label class="form-label" for="discription">Discription</label>
+            <textarea class="form-control mb-3" name="discription" id="discription" cols="30" rows="2" ><%= campground.discription%></textarea>
+            <button class="btn btn-success mb-3">Submit</button>
+        </form>
+    </div>
+</div> 
+    <a href="/campgrounds">All campgrounds</a>

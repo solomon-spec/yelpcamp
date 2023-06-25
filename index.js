@@ -48,7 +48,13 @@ app.get('/campgrounds/new', function (req, res) {
 })
 app.post('/campgrounds/new', async function (req, res) {
 
-    const newcamp = new campGround({title:req.body.title, location: req.body.location});
+    const newcamp = new campGround({
+        title:req.body.title, 
+        location: req.body.location,
+        image:req.body.imgurl,
+        price:req.body.price,
+        discription:req.body.discription
+    });
     newcamp.save();
     res.redirect('/campgrounds');
 })
@@ -72,6 +78,10 @@ app.put('/campgrounds/:id/', async function (req, res) {
     curCourse = await campGround.findById(id);
     curCourse.title = req.body.title;
     curCourse.location = req.body.location;
+    curCourse.image = req.body.imgurl
+    curCourse.price = req.body.price;
+    curCourse.discription = req.body.discription;
+    
     await curCourse.save();
     res.redirect('/campgrounds');
 });
