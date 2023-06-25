@@ -83,7 +83,7 @@ app.put('/campgrounds/:id/', async function (req, res) {
     curCourse.discription = req.body.discription;
     
     await curCourse.save();
-    res.redirect('/campgrounds');
+    res.redirect(`/campgrounds/${id}/show`);
 });
 
 app.listen(3000, function () {
