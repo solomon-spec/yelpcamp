@@ -6,6 +6,7 @@ const ejsMate = require('ejs-mate');
 const methodOverride = require('method-override');
 const asyncwrap = require('./utils/asyncwrap');
 const ExpressError = require('./utils/expressError');
+const validateCampground = require('./utils/validatecampgroung');
 
 app = express();
 mongoose.connect('mongodb://localhost:27017/yelp-camp', 
@@ -45,14 +46,15 @@ app.get('/campgrounds/:id/show', asyncwrap(async function (req, res) {
 
 // new campgrounds
 
-app.get('/campgrounds/new', function (req, res) {
+app.get('/campgrounds/new',function (req, res) {
     res.render('pages/newcamp');
 })
-app.post('/campgrounds/new',asyncwrap( async function (req, res,next) {
+app.post('/campgrounds/new',validateCampground,asyncwrap( async function (req, res,next) {
+
     const newcamp = new campGround({
         title:req.body.title, 
         location: req.body.location,
-        image:req.body.imgurl,
+        image:req.body.image,
         price:req.body.price,
         discription:req.body.discription
     });
@@ -74,12 +76,11 @@ app.get('/campgrounds/edit/:id', asyncwrap(async function (req, res) {
     res.render('pages/editcamp', {campground});
 }));
 
-app.put('/campgrounds/:id/', asyncwrap(async function (req, res) {
-    const {id} = req.params;
+app.put('/campgrounds/:id/',validateCampground, asyncwrap(async function (req, res) {
     curCourse = await campGround.findById(id);
     curCourse.title = req.body.title;
     curCourse.location = req.body.location;
-    curCourse.image = req.body.imgurl
+    curCourse.image = req.body.image
     curCourse.price = req.body.price;
     curCourse.discription = req.body.discription;
     
@@ -90,7 +91,8 @@ app.put('/campgrounds/:id/', asyncwrap(async function (req, res) {
 
 // error handling
 app.use(function (err,req,res,next) {
-    res.send('error');
+    let {message= 'something went wrong', statusCode= 500} = err;
+    res.status(statusCode).send(message);
 });
 
 app.listen(3000, function () {
