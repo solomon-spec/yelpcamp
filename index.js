@@ -7,19 +7,21 @@ const methodOverride = require('method-override');
 const asyncwrap = require('./utils/asyncwrap');
 const ExpressError = require('./utils/expressError');
 const validateCampground = require('./utils/validatecampgroung');
+const Review = require('./models/review');
 
 app = express();
-mongoose.connect('mongodb://localhost:27017/yelp-camp', 
-    {   useNewUrlParser: true, 
+mongoose.connect('mongodb://localhost:27017/yelp-camp',
+    {
+        useNewUrlParser: true,
         useUnifiedTopology: true
-     });
+    });
 
-mongoose.connection.once('open', function () {console.log('connected to mongodb')});
-mongoose.connection.on('error', function (error) {console.log('error connecting to mongodb')});
+mongoose.connection.once('open', function () { console.log('connected to mongodb') });
+mongoose.connection.on('error', function (error) { console.log('error connecting to mongodb') });
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
-app.use(express.urlencoded({extended: true}));
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(methodOverride('_method'));
 app.engine('ejs', ejsMate);
@@ -31,67 +33,78 @@ app.get('/', function (req, res) {
 // show all campgrounds
 app.get('/campgrounds', asyncwrap(async function (req, res) {
     const campgrounds = await campGround.find({});
-    res.render('pages/campgrounds', {campgrounds});
+    res.render('pages/campgrounds', { campgrounds });
 }));
 
 // show one campground
 app.get('/campgrounds/:id/show', asyncwrap(async function (req, res) {
-    const {id} = req.params;
-    const campground = await campGround.findById(id);
+    const { id } = req.params;
+    const campground = await campGround.findById(id).populate('reviews');
     console.log(campground);
-    res.render('pages/showcamp', {campground});
+    res.render('pages/showcamp', { campground });
 }));
 
 
 
 // new campgrounds
 
-app.get('/campgrounds/new',function (req, res) {
+app.get('/campgrounds/new', function (req, res) {
     res.render('pages/newcamp');
 })
-app.post('/campgrounds/new',validateCampground,asyncwrap( async function (req, res,next) {
+app.post('/campgrounds/new', validateCampground, asyncwrap(async function (req, res, next) {
 
     const newcamp = new campGround({
-        title:req.body.title, 
+        title: req.body.title,
         location: req.body.location,
-        image:req.body.image,
-        price:req.body.price,
-        discription:req.body.discription
+        image: req.body.image,
+        price: req.body.price,
+        discription: req.body.discription
     });
     await newcamp.save();
     res.redirect('/campgrounds');
 }));
 
 // delete campground
-app.delete('/campgrounds/:id/', asyncwrap(async function (req, res) {
-    const {id} = req.params;
+app.delete('/campgrounds/:id/', asyncwrap(async function (req, res, next) {
+    const { id } = req.params;
     await campGround.findByIdAndDelete(id);
     res.redirect('/campgrounds');
 }));
 
 // edit campground
-app.get('/campgrounds/edit/:id', asyncwrap(async function (req, res) {
-    const {id} = req.params;
+app.get('/campgrounds/edit/:id', asyncwrap(async function (req, res, next) {
+    const { id } = req.params;
     const campground = await campGround.findById(id);
-    res.render('pages/editcamp', {campground});
+    res.render('pages/editcamp', { campground });
 }));
 
-app.put('/campgrounds/:id/',validateCampground, asyncwrap(async function (req, res) {
+app.put('/campgrounds/:id/', validateCampground, asyncwrap(async function (req, res, next) {
     curCourse = await campGround.findById(id);
     curCourse.title = req.body.title;
     curCourse.location = req.body.location;
     curCourse.image = req.body.image
     curCourse.price = req.body.price;
     curCourse.discription = req.body.discription;
-    
+
     await curCourse.save();
     res.redirect(`/campgrounds/${id}/show`);
 }));
 
+// new review
 
+app.post('/campgrounds/:id/review/new', asyncwrap(async function (req, res) {
+    let { id } = req.params;
+    let { rating, content } = req.body;
+    let campground = await campGround.findById(id);
+    let newReview = new Review({ rating, content });
+    campground.reviews.push(newReview);
+    await newReview.save();
+    await campground.save();
+    res.redirect(`/campgrounds/${id}/show`);
+}));
 // error handling
-app.use(function (err,req,res,next) {
-    let {message= 'something went wrong', statusCode= 500} = err;
+app.use(function (err, req, res, next) {
+    let { message = 'something went wrong', statusCode = 500 } = err;
     res.status(statusCode).send(message);
 });
 

@@ -1,4 +1,5 @@
 const mogoose = require('mongoose');
+const Review = require('./review');
 const Schema = mogoose.Schema;
 const model = mogoose.model;
 
@@ -22,8 +23,13 @@ const campGroundSchema = new Schema({
     location: {
         type: String,
         required: true
-
-    }
+    },
+    reviews:[
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'Review'
+        }
+    ]
 });
 
 const CampGround = model('CampGround', campGroundSchema);

@@ -1,0 +1,17 @@
+<div class="card" style="width: 18rem;">
+    <div class="card-header">
+        Comments
+    </div>
+    <ul class="list-group list-group-flush">
+        <% for( review of reviews) { %>
+            <li class="list-group-item">
+                <span>
+                    <%= review.rating %>
+                </span>
+                <p>
+                    <%= review.content %>
+                </p>
+            </li>
+            <% } %>
+    </ul>
+</div>
