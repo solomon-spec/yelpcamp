@@ -8,13 +8,29 @@ const campGroundSchema = joi.object({
     location: joi.string().required()
 
 })
-module.exports = function (req, res, next) {
-const result = campGroundSchema.validate(req.body);
-if (result.error) {
-    const msg = result.error.details.map(el => el.message).join(',');
-    throw new ExpressError(400, msg);
+
+const reviewSchema = joi.object({
+    rating: joi.number().required().min(1).max(5),
+    content: joi.string().required()
+});
+module.exports.validateCampground = function (req, res, next) {
+    const result = campGroundSchema.validate(req.body);
+    if (result.error) {
+        const msg = result.error.details.map(el => el.message).join(',');
+        throw new ExpressError(400, msg);
+    }
+    else {
+        next();
+    }
 }
-else{
-    next();
-}
+
+module.exports.validateReview = function (req, res, next) {
+    const result = reviewSchema.validate(req.body);
+    if (result.error) {
+        const msg = result.error.details.map(el => el.message).join(',');
+        throw new ExpressError(400, msg);
+    }
+    else {
+        next();
+    }
 }

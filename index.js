@@ -6,7 +6,7 @@ const ejsMate = require('ejs-mate');
 const methodOverride = require('method-override');
 const asyncwrap = require('./utils/asyncwrap');
 const ExpressError = require('./utils/expressError');
-const validateCampground = require('./utils/validatecampgroung');
+const { validateCampground, validateReview } = require('./utils/validatecampgroung');
 const Review = require('./models/review');
 
 app = express();
@@ -92,7 +92,7 @@ app.put('/campgrounds/:id/', validateCampground, asyncwrap(async function (req, 
 
 // new review
 
-app.post('/campgrounds/:id/review/new', asyncwrap(async function (req, res) {
+app.post('/campgrounds/:id/review/new', validateReview, asyncwrap(async function (req, res) {
     let { id } = req.params;
     let { rating, content } = req.body;
     let campground = await campGround.findById(id);
