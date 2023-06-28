@@ -10,15 +10,18 @@
 </div>
 
 <% for( review of reviews) { %>
-    <div class="card m-2">
+    <div class="card m-1">
         <div class="card-body">
-            <p>
-                <span class="fw-bold">Rating </span>
-                <%= review.rating %>
+            <p class="m-0 fw-bold">
+                Rating: <%= review.rating %>
             </p>
-            <p>
-                Review <%= review.content%>
+            <p class="m-0">
+                Review: <%= review.content%>
             </p>
+            <form method="post" action="/campgrounds/<%=campground._id %>/review/<%= review._id%>?_method=delete">
+                <button class="btn btn-danger">Delete</button>
+            </form>
         </div>
+
     </div>
     <% } %>

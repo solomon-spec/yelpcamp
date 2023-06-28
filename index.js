@@ -102,6 +102,15 @@ app.post('/campgrounds/:id/review/new', validateReview, asyncwrap(async function
     await campground.save();
     res.redirect(`/campgrounds/${id}/show`);
 }));
+
+// delete review
+app.delete('/campgrounds/:id/review/:reviewid', asyncwrap(async function (req, res) {
+    const { id, reviewid } = req.params;
+    await campGround.findByIdAndUpdate(id, { $pull: { reviews: reviewid } });
+    await Review.findByIdAndDelete(reviewid);
+    res.redirect(`/campgrounds/${id}/show`);
+}));
+
 // error handling
 app.use(function (err, req, res, next) {
     let { message = 'something went wrong', statusCode = 500 } = err;

@@ -4,15 +4,16 @@ const Schema = mogoose.Schema;
 const model = mogoose.model;
 
 const campGroundSchema = new Schema({
-    title:{ 
-        type:String,
-        required: true},
+    title: {
+        type: String,
+        required: true
+    },
     price: {
         type: Number,
         min: 0,
         required: true
     },
-    image:{
+    image: {
         type: String,
         required: true
     },
@@ -24,7 +25,7 @@ const campGroundSchema = new Schema({
         type: String,
         required: true
     },
-    reviews:[
+    reviews: [
         {
             type: Schema.Types.ObjectId,
             ref: 'Review'
@@ -32,6 +33,17 @@ const campGroundSchema = new Schema({
     ]
 });
 
-const CampGround = model('CampGround', campGroundSchema);
+// debug
+campGroundSchema.post('findOneAndDelete', async function (doc) {
+    console.log(doc);
+    if (doc) {
+        await Review.deleteMany({
+            _id: {
+                $in: doc.reviews
+            }
+        })
+    }
 
+});
+const CampGround = model('CampGround', campGroundSchema);
 module.exports = CampGround;
