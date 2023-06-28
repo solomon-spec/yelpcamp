@@ -1,17 +1,24 @@
-<div class="card" style="width: 18rem;">
-    <div class="card-header">
-        Comments
-    </div>
-    <ul class="list-group list-group-flush">
-        <% for( review of reviews) { %>
-            <li class="list-group-item">
-                <span>
-                    <%= review.rating %>
-                </span>
-                <p>
-                    <%= review.content %>
-                </p>
-            </li>
-            <% } %>
-    </ul>
+<div>
+    <h3>Add Review</h3>
+    <form method="post" action="/campgrounds/<%=campground._id %>/review/new" class="needs-validation mb-5" novalidate>
+        <label class="form-label" for="rating">Rating</label>
+        <input class="form-range " type="range" name="rating" id="rating" min="1" max="5" required>
+        <label class="form-label" for="content">Review</label>
+        <textarea class="form-control" name="content" id="content" cols="30" rows="4" required></textarea>
+        <button class="btn btn-success">Submit</button>
+    </form>
 </div>
+
+<% for( review of reviews) { %>
+    <div class="card m-2">
+        <div class="card-body">
+            <p>
+                <span class="fw-bold">Rating </span>
+                <%= review.rating %>
+            </p>
+            <p>
+                Review <%= review.content%>
+            </p>
+        </div>
+    </div>
+    <% } %>

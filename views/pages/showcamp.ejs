@@ -25,18 +25,8 @@
         <a class="btn btn-primary" href="/campgrounds">back to background</a>
       </div>
     </div>
-    <div class="col-3">
+    <div class="col-4">
       <%- include('../partials/review.ejs',{reviews:campground.reviews}) %>
     </div>
   </div>
-  </div>
-  <div class="col-3 offset-1">
-    <h3>Add Review</h3>
-    <form method="post" action="/campgrounds/<%=campground._id %>/review/new" class="needs-validation mb-5" novalidate>
-      <label class="form-label" for="rating">Rating</label>
-      <input class="form-range " type="range" name="rating" id="rating" min="1" max="5" required>
-      <label class="form-label" for="content">Review</label>
-      <textarea class="form-control" name="content" id="content" cols="30" rows="4" required></textarea>
-      <button class="btn btn-success">Submit</button>
-    </form>
   </div>
