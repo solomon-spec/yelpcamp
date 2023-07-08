@@ -14,7 +14,6 @@ mongoose.connect('mongodb://localhost:27017/yelp-camp',
         useNewUrlParser: true,
         useUnifiedTopology: true,
         useUnifiedTopology: true,
-        useFindAndModify: false
     });
 
 mongoose.connection.once('open', function () { console.log('connected to mongodb') });
@@ -27,7 +26,7 @@ app.engine('ejs', ejsMate);
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(methodOverride('_method'));
-app.use(express.static(path.join(__dirname, 'public')));
+//app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/', function (req, res) {
     res.render('pages/home');
