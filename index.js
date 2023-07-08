@@ -8,6 +8,8 @@ const asyncwrap = require('./utils/asyncwrap');
 const ExpressError = require('./utils/expressError');
 const { validateCampground, validateReview } = require('./utils/validatecampgroung');
 const Review = require('./models/review');
+const campgroundRouter = require('./router/campgroundrouter');
+const reviewRouter = require('./router/reviewrouter');
 
 app = express();
 mongoose.connect('mongodb://localhost:27017/yelp-camp',
@@ -30,91 +32,18 @@ app.get('/', function (req, res) {
     res.render('pages/home');
 });
 
-// show all campgrounds
-app.get('/campgrounds', asyncwrap(async function (req, res) {
-    const campgrounds = await campGround.find({});
-    res.render('pages/campgrounds', { campgrounds });
-}));
 
-// show one campground
-app.get('/campgrounds/:id/show', asyncwrap(async function (req, res) {
-    const { id } = req.params;
-    const campground = await campGround.findById(id).populate('reviews');
-    console.log(campground);
-    res.render('pages/showcamp', { campground });
-}));
+// review router
+app.use('/campgrounds/:id/review', reviewRouter);
+//campgrounds router
+app.use('/campgrounds', campgroundRouter);
 
 
-
-// new campgrounds
-
-app.get('/campgrounds/new', function (req, res) {
-    res.render('pages/newcamp');
-})
-app.post('/campgrounds/new', validateCampground, asyncwrap(async function (req, res, next) {
-
-    const newcamp = new campGround({
-        title: req.body.title,
-        location: req.body.location,
-        image: req.body.image,
-        price: req.body.price,
-        discription: req.body.discription
-    });
-    await newcamp.save();
-    res.redirect('/campgrounds');
-}));
-
-// delete campground
-app.delete('/campgrounds/:id/', asyncwrap(async function (req, res, next) {
-    const { id } = req.params;
-    await campGround.findByIdAndDelete(id);
-    res.redirect('/campgrounds');
-}));
-
-// edit campground
-app.get('/campgrounds/edit/:id', asyncwrap(async function (req, res, next) {
-    const { id } = req.params;
-    const campground = await campGround.findById(id);
-    res.render('pages/editcamp', { campground });
-}));
-
-app.put('/campgrounds/:id/', validateCampground, asyncwrap(async function (req, res, next) {
-    curCourse = await campGround.findById(id);
-    curCourse.title = req.body.title;
-    curCourse.location = req.body.location;
-    curCourse.image = req.body.image
-    curCourse.price = req.body.price;
-    curCourse.discription = req.body.discription;
-
-    await curCourse.save();
-    res.redirect(`/campgrounds/${id}/show`);
-}));
-
-// new review
-
-app.post('/campgrounds/:id/review/new', validateReview, asyncwrap(async function (req, res) {
-    let { id } = req.params;
-    let { rating, content } = req.body;
-    let campground = await campGround.findById(id);
-    let newReview = new Review({ rating, content });
-    campground.reviews.push(newReview);
-    await newReview.save();
-    await campground.save();
-    res.redirect(`/campgrounds/${id}/show`);
-}));
-
-// delete review
-app.delete('/campgrounds/:id/review/:reviewid', asyncwrap(async function (req, res) {
-    const { id, reviewid } = req.params;
-    await campGround.findByIdAndUpdate(id, { $pull: { reviews: reviewid } });
-    await Review.findByIdAndDelete(reviewid);
-    res.redirect(`/campgrounds/${id}/show`);
-}));
 
 // error handling
 app.use(function (err, req, res, next) {
     let { message = 'something went wrong', statusCode = 500 } = err;
-    res.status(statusCode).send(message);
+    res.status(statusCode).send(message + err);
 });
 
 app.listen(3000, function () {
