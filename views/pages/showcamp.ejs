@@ -1,32 +1,33 @@
 <% layout('./layouts/boilerplate') %>
   <div class="row">
-    <div class="card col-6 offset-1 mb-5">
-      <img style="width:100%;" src="<%= campground.image %>" alt="">
-      <div class="card-body">
-        <h1 class="card-title">
-          <%= campground.title %>
-        </h1>
-        <p class="card-text">
-          <%= campground.discription %>
-        </p>
+    <%- include('../partials/flash') %>
+      <div class="card col-6 offset-1 mb-5">
+        <img style="width:100%;" src="<%= campground.image %>" alt="">
+        <div class="card-body">
+          <h1 class="card-title">
+            <%= campground.title %>
+          </h1>
+          <p class="card-text">
+            <%= campground.discription %>
+          </p>
+        </div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item"><span class="fw-bold">Price: </span>$<%= campground.price%>
+          </li>
+          <li class="list-group-item"><span class="fw-bold">Location: </span>
+            <%= campground.location%>
+          </li>
+        </ul>
+        <div class="card-body">
+          <a href="/campgrounds/edit/<%=campground._id%>" class="card-link btn btn-success">Edit</a>
+          <form class="d-inline-block" method="post" action="/campgrounds/<%=campground._id%>?_method=delete">
+            <button class="card-link btn btn-danger">Delete</button>
+          </form>
+          <a class="btn btn-primary" href="/campgrounds">back to background</a>
+        </div>
       </div>
-      <ul class="list-group list-group-flush">
-        <li class="list-group-item"><span class="fw-bold">Price: </span>$<%= campground.price%>
-        </li>
-        <li class="list-group-item"><span class="fw-bold">Location: </span>
-          <%= campground.location%>
-        </li>
-      </ul>
-      <div class="card-body">
-        <a href="/campgrounds/edit/<%=campground._id%>" class="card-link btn btn-success">Edit</a>
-        <form class="d-inline-block" method="post" action="/campgrounds/<%=campground._id%>?_method=delete">
-          <button class="card-link btn btn-danger">Delete</button>
-        </form>
-        <a class="btn btn-primary" href="/campgrounds">back to background</a>
+      <div class="col-4">
+        <%- include('../partials/review.ejs',{reviews:campground.reviews}) %>
       </div>
-    </div>
-    <div class="col-4">
-      <%- include('../partials/review.ejs',{reviews:campground.reviews}) %>
-    </div>
   </div>
   </div>
