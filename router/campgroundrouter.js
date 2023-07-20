@@ -3,6 +3,7 @@ const asyncwrap = require('../utils/asyncwrap');
 const campGround = require('../models/campground');
 const { validateCampground } = require('../utils/validatecampgroung');
 
+
 // show all campgrounds
 router.get('/', asyncwrap(async function (req, res) {
     const campgrounds = await campGround.find({});
