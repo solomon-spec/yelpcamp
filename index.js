@@ -65,6 +65,7 @@ app.all('*', function (req, res, next) {
     next(err);
 });
 
+
 // error handling
 app.use(function (err, req, res, next) {
     let { message = 'something went wrong', statusCode = 500 } = err;
